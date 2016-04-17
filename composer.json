@@ -1,0 +1,15 @@
+{
+    "name": "dfba/schema",
+    "description": "Read database schema, table and column metadata in Laravel or plain PHP.",
+    "require": {
+        "doctrine/dbal": "^2.5"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dave Bakker",
+            "email": "dfba@davebakker.io"
+        }
+    ],
+    "minimum-stability": "dev"
+}
