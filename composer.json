@@ -11,5 +11,9 @@
             "email": "dfba@davebakker.io"
         }
     ],
-    "minimum-stability": "dev"
+    "autoload": {
+        "psr-4": {
+            "Dfba\\Schema\\": "src/"
+        }
+    }
 }
