@@ -4,12 +4,11 @@ namespace Dfba\Schema;
 
 class Schema {
 
-	protected $pdo = null;
-
 	protected $name = '';
 	protected $characterSet = null;
 	protected $collation = null;
 
+	protected $pdo = null;
 	protected $tables = [];
 
 	public function __construct($pdo, array $attributes=[]) {

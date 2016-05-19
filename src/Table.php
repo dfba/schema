@@ -4,14 +4,13 @@ namespace Dfba\Schema;
 
 class Table {
 
-	protected $schema = null;
-
 	protected $name = '';
 	protected $engine = null;
 	protected $characterSet = null;
 	protected $collation = null;
 	protected $comment = '';
 
+	protected $schema = null;
 	protected $columns = [];
 
 	public function __construct(Schema $schema, array $attributes=[]) {

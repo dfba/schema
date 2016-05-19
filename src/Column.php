@@ -4,8 +4,6 @@ namespace Dfba\Schema;
 
 class Column {
 
-	protected $table = null;
-
 	protected $name = '';
 	protected $dataType = '';
 	protected $unsigned = false;
@@ -20,6 +18,8 @@ class Column {
 	protected $characterSet = null;
 	protected $collation = null;
 	protected $comment = null;
+
+	protected $table = null;
 
 	public function __construct(Table $table, array $attributes=[]) {
 		$this->table = $table;
