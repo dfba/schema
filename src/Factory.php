@@ -310,7 +310,7 @@ class Factory {
 
 
 		if ($column['dataType'] == 'enum' || $column['dataType'] == 'set') {
-			$attributes['options'] = explode("','", str_replace("''", "'", preg_replace("/(enum|set)\('(.+?)'\)/","\\2", $attributes['type'])));
+			$column['options'] = explode("','", str_replace("''", "'", preg_replace("/(enum|set)\('(.+?)'\)/","\\2", $attributes['type'])));
 		}
 
 		$column['minimumValue'] = $this->getMinimumValue($column);
