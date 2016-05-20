@@ -8,12 +8,9 @@ class Schema {
 	protected $characterSet = null;
 	protected $collation = null;
 
-	protected $pdo = null;
 	protected $tables = [];
 
-	public function __construct($pdo, array $attributes=[]) {
-		// $this->pdo = $pdo;
-
+	public function __construct(array $attributes=[]) {
 		$this->setAttributes($attributes);
 	}
 
@@ -25,10 +22,6 @@ class Schema {
 
 			$this->{$key} = $value;
 		}
-	}
-	
-	public function getPdo() {
-		return $this->pdo;
 	}
 
 	public function getName() {
