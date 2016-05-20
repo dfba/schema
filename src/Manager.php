@@ -4,7 +4,7 @@ namespace Dfba\Schema;
 
 use PDO;
 
-class Factory {
+class Manager {
 
 	protected $cachedSchemas = [];
 
