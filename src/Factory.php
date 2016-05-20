@@ -173,6 +173,9 @@ class Factory {
 				`CHARACTER_SET_NAME` AS `characterSet`,
 				`COLLATION_NAME` AS `collation`,
 				`COLUMN_TYPE` AS `type`,
+				`NUMERIC_PRECISION` AS `numericPrecision`,
+				`NUMERIC_SCALE` AS `numericScale`,
+				`DATETIME_PRECISION` AS `datetimePrecision`,
 				`EXTRA` AS `extra`,
 				`COLUMN_COMMENT` AS `comment`
 			FROM `INFORMATION_SCHEMA`.`COLUMNS`
@@ -186,6 +189,18 @@ class Factory {
 		}
 
 		return $columnAttributes;
+	}
+
+	protected function generateDecimal($precision, $scale, $digit) {
+		if ($digit == '0') {
+			$decimal = '0';
+		} else {
+			$decimal = str_repeat($digit, $precision-$scale);
+		}
+		if ($scale) {
+			$decimal .= '.'. str_repeat($digit, $scale);
+		}
+		return $decimal;
 	}
 
 	protected function getMaximumValue($columnAttributes) {
@@ -203,6 +218,8 @@ class Factory {
 					return '4294967295';
 				case 'bigint':
 					return '18446744073709551615';
+				case 'decimal':
+					return $this->generateDecimal($columnAttributes['precision'], $columnAttributes['scale'], '9');
 			}
 		} else {
 			switch ($dataType) {
@@ -216,6 +233,22 @@ class Factory {
 					return '2147483647';
 				case 'bigint':
 					return '9223372036854775807';
+				case 'decimal':
+					return $this->generateDecimal($columnAttributes['precision'], $columnAttributes['scale'], '9');
+				case 'date':
+					return '9999-12-31';
+				case 'datetime':
+					$date = '9999-12-31 23:59:59';
+					if ($columnAttributes['precision'] > 0) {
+						$date .= '.'. str_repeat('9', $columnAttributes['precision']);
+					}
+					return $date;
+				case 'timestamp':
+					$date = '2038-01-19 03:14:07';
+					if ($columnAttributes['precision'] > 0) {
+						$date .= '.'. str_repeat('9', $columnAttributes['precision']);
+					}
+					return $date;
 			}
 		}
 
@@ -233,6 +266,8 @@ class Factory {
 				case 'int':
 				case 'bigint':
 					return '0';
+				case 'decimal':
+					return $this->generateDecimal($columnAttributes['precision'], $columnAttributes['scale'], '0');
 			}
 		} else {
 			switch ($dataType) {
@@ -246,6 +281,22 @@ class Factory {
 					return '-2147483648';
 				case 'bigint':
 					return '-9223372036854775808';
+				case 'decimal':
+					return '-'. $this->generateDecimal($columnAttributes['precision'], $columnAttributes['scale'], '9');
+				case 'date':
+					return '1000-01-01';
+				case 'datetime':
+					$date = '1000-01-01 00:00:00';
+					if ($columnAttributes['precision'] > 0) {
+						$date .= '.'. str_repeat('0', $columnAttributes['precision']);
+					}
+					return $date;
+				case 'timestamp':
+					$date = '1970-01-01 00:00:01';
+					if ($columnAttributes['precision'] > 0) {
+						$date .= '.'. str_repeat('0', $columnAttributes['precision']);
+					}
+					return $date;
 			}
 		}
 
@@ -266,6 +317,8 @@ class Factory {
 			'autoIncrement' => false,
 			'unsigned' => false,
 			'zerofill' => false,
+			'precision' => $attributes['datetimePrecision'] ?: $attributes['numericPrecision'],
+			'scale' => $attributes['numericScale'],
 			'defaultValue' => $attributes['defaultValue'],
 			'options' => null,
 		];
@@ -290,23 +343,23 @@ class Factory {
 			$column['zerofill'] = true;
 		}
 
-		if ($column['defaultValue'] !== null) {
+		// if ($column['defaultValue'] !== null) {
 
-			switch ($column['dataType']) {
-				case 'date':
-					$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'Y-m-d');
-					break;
+		// 	switch ($column['dataType']) {
+		// 		case 'date':
+		// 			$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'Y-m-d');
+		// 			break;
 
-				case 'datetime':
-					$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'Y-m-d H:i:s');
-					break;
+		// 		case 'datetime':
+		// 			$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'Y-m-d H:i:s');
+		// 			break;
 
-				case 'timestamp':
-					$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'U');
-					break;
-			}
+		// 		case 'timestamp':
+		// 			$column['defaultValue'] = $this->newDateFromString($column['defaultValue'], 'U');
+		// 			break;
+		// 	}
 
-		}
+		// }
 
 
 		if ($column['dataType'] == 'enum' || $column['dataType'] == 'set') {

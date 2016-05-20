@@ -15,6 +15,8 @@ class Column {
 	protected $maximumLength = null;
 	protected $minimumValue = null;
 	protected $maximumValue = null;
+	protected $precision = null;
+	protected $scale = null;
 	protected $characterSet = null;
 	protected $collation = null;
 	protected $comment = null;
