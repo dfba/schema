@@ -13,7 +13,7 @@ class Manager {
 		$this->cachedSchemas = [];
 	}
 
-	protected function addSchemaToCache(PDO $pdo, $schemaName, Schema $schema) {
+	protected function addSchemaToCache(PDO $pdo, $schemaName, $schema) {
 
 		$this->cachedSchemas[] = [
 			'pdo' => $pdo,
