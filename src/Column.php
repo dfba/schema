@@ -47,4 +47,64 @@ class Column {
 		return $this->name;
 	}
 
+	public function getDataType() {
+		return $this->dataType;
+	}
+
+	public function getUnsigned() {
+		return $this->unsigned;
+	}
+
+	public function getZerofill() {
+		return $this->zerofill;
+	}
+
+	public function getNullable() {
+		return $this->nullable;
+	}
+
+	public function getDefaultValue() {
+		return $this->defaultValue;
+	}
+
+	public function getOptions() {
+		return $this->options;
+	}
+
+	public function getAutoIncrement() {
+		return $this->autoIncrement;
+	}
+
+	public function getMaximumLength() {
+		return $this->maximumLength;
+	}
+
+	public function getMinimumValue() {
+		return $this->minimumValue;
+	}
+
+	public function getMaximumValue() {
+		return $this->maximumValue;
+	}
+
+	public function getPrecision() {
+		return $this->precision;
+	}
+
+	public function getScale() {
+		return $this->scale;
+	}
+
+	public function getCharacterSet() {
+		return $this->characterSet;
+	}
+
+	public function getCollation() {
+		return $this->collation;
+	}
+
+	public function getComment() {
+		return $this->comment;
+	}
+
 }

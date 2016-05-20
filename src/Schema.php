@@ -28,6 +28,14 @@ class Schema {
 		return $this->name;
 	}
 
+	public function getCharacterSet() {
+		return $this->characterSet;
+	}
+
+	public function getCollation() {
+		return $this->collation;
+	}
+
 	public function getTables() {
 		return $this->tables;
 	}

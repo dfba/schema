@@ -37,6 +37,22 @@ class Table {
 		return $this->name;
 	}
 
+	public function getEngine() {
+		return $this->engine;
+	}
+
+	public function getCharacterSet() {
+		return $this->characterSet;
+	}
+
+	public function getCollation() {
+		return $this->collation;
+	}
+
+	public function getComment() {
+		return $this->comment;
+	}
+
 	public function getColumns() {
 		return $this->columns;
 	}
