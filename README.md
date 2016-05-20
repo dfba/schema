@@ -2,7 +2,7 @@
 ... a very lightweight one. Iterate through all your databases, tables and columns without having to lookup the correct query syntax for your specific database system.
 
 ```
-composer install dfba/schema
+composer require dfba/schema
 ```
 
 ## Examples
