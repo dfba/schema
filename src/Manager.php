@@ -8,56 +8,72 @@ class Manager {
 
 	protected $cachedSchemas = [];
 
+	public function clearCache() {
+
+		$this->cachedSchemas = [];
+	}
+
+	protected function addSchemaToCache(PDO $pdo, $schemaName, Schema $schema) {
+
+		$this->cachedSchemas[] = [
+			'pdo' => $pdo,
+			'name' => $schemaName,
+			'schema' => $schema,
+		];
+
+	}
+
+	protected function getCachedSchemaIndex(PDO $pdo, $schemaName) {
+
+		foreach ($this->cachedSchemas as $index => $cachedSchema) {
+			if ($cachedSchema['pdo'] === $pdo && $cachedSchema['name'] == $schemaName) {
+				return $index;
+			}
+		}
+
+		return false;
+	}
+
+	public function hasSchemaInCache(PDO $pdo, $schemaName) {
+
+		return $this->getCachedSchemaIndex($pdo, $schemaName) !== false;
+	}
+
 	public function getSchemaFromCache(PDO $pdo, $schemaName) {
 
-		foreach ($this->cachedSchemas as $cachedSchema) {
-			if ($cachedSchema->getPdo() == $pdo && $cachedSchema->getName() == $schemaName) {
-				return $cachedSchema;
-			}
-		}
+		$index = $this->getCachedSchemaIndex($pdo, $schemaName);
 
-		return null;
-	}
-
-	public function clearCache($pdo=null) {
-
-		if ($pdo) {
-
-			foreach ($this->cachedSchemas as $i => $cachedSchema) {
-				if ($cachedSchema->getPdo() == $pdo) {
-					array_splice($this->cachedSchemas, $i, 1);
-					break;
-				}
-			}
+		if ($index !== false) {
+			return $this->cachedSchemas[$index]['schema'];
 
 		} else {
-			$this->cachedSchemas = [];
+			return null;
 		}
-		
 	}
 
-	protected function addSchemaToCache(Schema $schema) {
+	public function removeSchemaFromCache(PDO $pdo, $schemaName) {
 
-		$this->cache[] = $schema;
+		$index = $this->getCachedSchemaIndex($pdo, $schemaName);
 
+		if ($index !== false) {
+			array_splice($this->cachedSchemas, $index, 1);
+		}
 	}
 
 	public function getSchema(PDO $pdo, $schemaName) {
 
-		$schema = $this->getSchemaFromCache($pdo, $schemaName);
+		if ($this->hasSchemaInCache($pdo, $schemaName)) {
 
-		if ($schema) {
+			return $this->getSchemaFromCache($pdo, $schemaName);
+
+		} else {
+			
+			$schemaFactory = $this->newSchemaFactory($pdo);
+			$schema = $schemaFactory->fetchSchema($pdo, $schemaName);
+			$this->addSchemaToCache($pdo, $schemaName, $schema);
+
 			return $schema;
 		}
-
-		$schemaFactory = $this->newSchemaFactory($pdo);
-		$schema = $schemaFactory->fetchSchema($pdo, $schemaName);
-
-		if ($schema) {
-			$this->addSchemaToCache($schema);
-		}
-
-		return $schema;
 	}
 
 	protected function getDriverName(PDO $pdo) {
