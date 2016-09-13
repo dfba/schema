@@ -17,6 +17,7 @@ class Column {
 	protected $maximumValue = null;
 	protected $precision = null;
 	protected $scale = null;
+	protected $displayWidth = null;
 	protected $characterSet = null;
 	protected $collation = null;
 	protected $comment = null;
@@ -93,6 +94,10 @@ class Column {
 
 	public function getScale() {
 		return $this->scale;
+	}
+
+	public function getDisplayWidth() {
+		return $this->displayWidth;
 	}
 
 	public function getCharacterSet() {

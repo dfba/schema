@@ -242,6 +242,31 @@ class MySqlSchemaFactory extends SchemaFactory {
 		return null;
 	}
 
+	protected function getDisplayWidth($columnAttributes) {
+		$dataType = $columnAttributes['dataType'];
+
+		$typesWithDisplayWidth = [
+			'tinyint',
+			'smallint',
+			'mediumint',
+			'int',
+			'bigint',
+		];
+
+		if (in_array($dataType, $typesWithDisplayWidth)) {
+
+			preg_match('/^\w+\((\d+)/', $columnAttributes['type'], $matches);
+
+			$displayWidth = (int) @$matches[1];
+
+			return $displayWidth ?: null;
+
+		}
+
+
+		return null;
+	}
+
 
 	protected function parseInformationSchemaColumn($attributes) {
 
@@ -258,6 +283,7 @@ class MySqlSchemaFactory extends SchemaFactory {
 			'zerofill' => false,
 			'precision' => $attributes['datetimePrecision'] ?: $attributes['numericPrecision'],
 			'scale' => $attributes['numericScale'],
+			'displayWidth' => $this->getDisplayWidth($attributes),
 			'defaultValue' => $attributes['defaultValue'],
 			'options' => null,
 		];
