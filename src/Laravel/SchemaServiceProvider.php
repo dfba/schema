@@ -25,16 +25,21 @@ class SchemaServiceProvider extends \Illuminate\Support\ServiceProvider
         $this->app->singleton(Manager::class, function ($app) {
             return new Manager();
         });
-    }
 
-    public function boot(Manager $manager, Connection $connection)
-    {
-        $this->app->singleton(Schema::class, function ($app) use($manager, $connection) {
+        $this->app->singleton(Schema::class, function ($app) {
+            $manager = app(Manager::class);
+            $connection = app(Connection::class);
+
             return $manager->getSchema(
                 $connection->getReadPdo(),
                 $connection->getDatabaseName()
             );
         });
+    }
+
+    public function boot(Manager $manager, Connection $connection)
+    {
+        
     }
 
     /**
