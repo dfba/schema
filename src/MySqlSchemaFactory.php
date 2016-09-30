@@ -6,6 +6,32 @@ use PDO;
 
 class MySqlSchemaFactory extends SchemaFactory {
 
+	protected function getServerVersion(PDO $pdo) {
+
+		$versionString = $pdo->getAttribute(PDO::ATTR_SERVER_VERSION);
+		$versionParts = explode('.', $versionString);
+		$releaseParts = explode('-', $versionParts[2]);
+
+		return (object) [
+			'major' => $versionParts[0],
+			'minor' => $versionParts[1],
+			'release' => $releaseParts[0],
+		];
+
+	}
+
+	protected function isServerVersionAtLeast(PDO $pdo, $major, $minor=0, $release=0) {
+
+		$serverVersion = $this->getServerVersion($pdo);
+
+		return (
+			$serverVersion->major >= $major &&
+			$serverVersion->minor >= $minor &&
+			$serverVersion->release >= $release
+		);
+
+	}
+
 	public function fetchSchema(PDO $pdo, $schemaName) {
 		$schemaAttributes = $this->querySchemas($pdo, [$schemaName]);
 		
@@ -102,6 +128,11 @@ class MySqlSchemaFactory extends SchemaFactory {
 
 		$conditions = $this->sqlIn($parameters, '`COLUMN_NAME`', $columns);
 
+		$datetimePrecision = "NULL";
+		if ($this->isServerVersionAtLeast($pdo, 5, 6, 4)) {
+			$datetimePrecision = "`DATETIME_PRECISION`";
+		}
+
 		$columnResults = $this->executeSelectQuery($pdo, 
 			"SELECT
 				`COLUMN_NAME` AS `name`,
@@ -114,7 +145,7 @@ class MySqlSchemaFactory extends SchemaFactory {
 				`COLUMN_TYPE` AS `type`,
 				`NUMERIC_PRECISION` AS `numericPrecision`,
 				`NUMERIC_SCALE` AS `numericScale`,
-				`DATETIME_PRECISION` AS `datetimePrecision`,
+				$datetimePrecision AS `datetimePrecision`,
 				`EXTRA` AS `extra`,
 				`COLUMN_COMMENT` AS `comment`
 			FROM `INFORMATION_SCHEMA`.`COLUMNS`
