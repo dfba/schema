@@ -7,6 +7,7 @@ class Schema {
 	protected $name = '';
 	protected $characterSet = null;
 	protected $collation = null;
+	protected $file = null;
 
 	protected $tables = [];
 
@@ -34,6 +35,10 @@ class Schema {
 
 	public function getCollation() {
 		return $this->collation;
+	}
+
+	public function getFile() {
+		return $this->file;
 	}
 
 	public function getTables() {

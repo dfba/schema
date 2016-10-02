@@ -84,6 +84,10 @@ class Manager {
 		return new MySqlSchemaFactory();
 	}
 
+	public function newSQLiteSchemaFactory() {
+		return new SQLiteSchemaFactory();
+	}
+
 	public function newSchemaFactory(PDO $pdo) {
 		$driverName = $this->getDriverName($pdo);
 		$methodName = 'new'. $driverName .'SchemaFactory';
