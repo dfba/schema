@@ -116,5 +116,5 @@ var_dump($schema);
 
 You should be aware of that the `Dfba\Schema\Manager` caches retrieved schemas to prevent fetching the same data multiple times. If you create new `Dfba\Schema\Manager` instances over and over again, you won't benefit from the cache.
 
-## Postgres, SQLite, SQL Server, etc.?
-Oh... yeah. MySQL is the only database currently implemented. I have extracted all the database specific code into it's own file, though. You want other databases implemented? Open an [issue](../../issues), or better yet: copy [src/MySqlSchemaFactory.php](../master/src/MySqlSchemaFactory.php) and do it yourself. It's not that hard! You can do it! :)
+## Postgres, SQL Server, etc.?
+Oh... yeah. MySQL and SQLite are the only databases currently implemented. I have extracted all the database specific code into it's own file, though. You want other databases implemented? Open an [issue](../../issues), or better yet: copy [src/MySqlSchemaFactory.php](../master/src/MySqlSchemaFactory.php) and do it yourself. It's not that hard! You can do it! :)
